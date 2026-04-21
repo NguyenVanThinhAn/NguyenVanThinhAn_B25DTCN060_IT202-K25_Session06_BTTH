@@ -129,5 +129,5 @@ GROUP BY users.id, hotels.rate
 HAVING SUM(bookings.revenue) > 50000000
 ORDER BY hotels.rate DESC, SUM(bookings.revenue) DESC;
 
--- Em dùng id của hotel để lọc ra, rate cũng đi theo hotel, tổng doanh thu dùng hàm SUM và vì booking id cũng được link với id của hotel từ đó tính toán SUM chính xác. Booking lại là khóa ngoại và cũng được link với USERID, từ đó 1 người dùng hay doanh thu từ người dùng đó có thể xuất hiện trên nhiều khách sạn tùy thuộc vào người dùng đó book khách sạn nào
--- Mặc định nó đã không được tính vào doanh thu vì đơn giản nó đã bị CANCELLED, em đã lọc ra COMPLETED để tính. Thế nhưng nếu phải lọc thì em sẽ lọc ở WHERE, vì nó đơn giản và tối ưu hơn thay vì gom lại rồi lọc. Hơn nữa, với INNER JOIN, các trường hợp không hợp lệ đều đã bị clean.
+-- Tính tổng chi tiêu của từng khách hàng theo từng hạng sao khách sạn bằng cách JOIN users, bookings và hotels qua khóa ngoại, sau đó GROUP BY users.id và hotels.rate để tránh gộp sai dữ liệu giữa các hạng sao.  
+-- Chỉ tính các đơn COMPLETED (lọc bằng WHERE để tối ưu), loại bỏ dữ liệu không hợp lệ qua INNER JOIN, và chỉ giữ các nhóm có tổng chi tiêu lớn hơn 50tr (HAVING), sắp xếp theo hạng sao giảm dần và tổng chi tiêu giảm dần.
